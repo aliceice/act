@@ -1,5 +1,9 @@
 package de.aice.act;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 /**
  * HTTP Headers.
  *
@@ -14,4 +18,9 @@ public interface Headers {
 	String DATE           = "Date";
 	String HOST           = "Host";
 
+	Optional<String> getSingle(String name);
+
+	Map<String,List<String>> toMap();
+
+	boolean has(String name, String value);
 }

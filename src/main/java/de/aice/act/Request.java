@@ -1,9 +1,5 @@
 package de.aice.act;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 /**
  * HTTP Request value object.
  *
@@ -12,12 +8,12 @@ import java.util.Map;
  */
 public final class Request {
 
-	public final String                    method;
-	public final String                    path;
-	public final Map<String, List<String>> headers;
-	public final String                    body;
+	public final String  method;
+	public final String  path;
+	public final Headers headers;
+	public final String  body;
 
-	public Request(final String method, final String path, final Map<String, List<String>> headers, final String body) {
+	public Request(final String method, final String path, final Headers headers, final String body) {
 		this.method = method;
 		this.path = path;
 		this.headers = headers;
@@ -28,7 +24,7 @@ public final class Request {
 	public String toString() {
 		return String.format("%s %s %s",
 		                     this.method,
-		                     this.headers.getOrDefault(Headers.HOST, Collections.singletonList("")).get(0),
+		                     this.headers.getSingle(Headers.HOST).orElse(""),
 		                     this.path);
 	}
 }

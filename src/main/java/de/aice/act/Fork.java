@@ -1,12 +1,10 @@
-package de.aice.act.fork;
+package de.aice.act;
 
-import de.aice.act.Act;
-import de.aice.act.Request;
-import de.aice.act.Response;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -45,6 +43,10 @@ public interface Fork {
 		};
 	}
 
+	static Fork path(final String regex, final Act act) {
+		return path(regex, (request, matcher) -> act.on(request));
+	}
+
 	/**
 	 * Fork on path matching regex.
 	 *
@@ -52,11 +54,14 @@ public interface Fork {
 	 * @param act   act to call.
 	 * @return Path matching fork.
 	 */
-	static Fork path(final String regex, final Act act) {
+	static Fork path(final String regex, final RegexAct act) {
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-		return request -> pattern.matcher(request.path).matches()
-		                  ? Optional.of(act.on(request))
-		                  : Optional.empty();
+		return request -> {
+			Matcher matcher = pattern.matcher(request.path);
+			return matcher.matches()
+			       ? Optional.of(act.on(request, matcher))
+			       : Optional.empty();
+		};
 	}
 
 	/**
@@ -69,6 +74,12 @@ public interface Fork {
 	static Fork method(final String methods, final Act act) {
 		List<String> list = Arrays.asList(methods.split(","));
 		return request -> list.contains(request.method)
+		                  ? Optional.of(act.on(request))
+		                  : Optional.empty();
+	}
+
+	static Fork type(String type, Act act) {
+		return request -> request.headers.has(Headers.CONTENT_TYPE, type)
 		                  ? Optional.of(act.on(request))
 		                  : Optional.empty();
 	}

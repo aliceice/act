@@ -1,19 +1,18 @@
 package de.aice.act.http;
 
-import de.aice.act.Headers;
 import de.aice.act.Request;
 import de.aice.act.Response;
 import de.aice.act.misc.Strings;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
-import java.util.Collections;
 import org.junit.Test;
 
+import static de.aice.act.Headers.ACCEPT;
+import static de.aice.act.Headers.HOST;
 import static de.aice.act.misc.InputStreams.stream;
 import static de.aice.act.misc.Strings.CR_LF;
 import static de.aice.act.misc.Strings.joinOn;
 import static de.aice.act.misc.Structures.tryWith;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -46,8 +45,8 @@ public final class BackStageSupportTest {
 		Request request = readRequest();
 		assertNotNull(request);
 		assertNotNull(request.headers);
-		assertThat(request.headers).containsEntry(Headers.HOST, Collections.singletonList("localhost"))
-		                           .containsEntry(Headers.ACCEPT, Collections.singletonList("text/plain"));
+		assertTrue(request.headers.has(HOST, "localhost"));
+		assertTrue(request.headers.has(ACCEPT, "text/plain"));
 	}
 
 	@Test

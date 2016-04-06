@@ -1,5 +1,6 @@
 package de.aice.act;
 
+import com.jcabi.log.Logger;
 import java.io.IOException;
 
 /**
@@ -18,4 +19,12 @@ public interface Act {
 	 * @throws IOException if something goes wrong.
 	 */
 	Response on(Request request) throws IOException;
+
+	static Act logged(Act act) {
+		return request -> {
+			final Response response = act.on(request);
+			Logger.info(Act.class, "%s %s -> %s", request.method, request.path, response.status);
+			return response;
+		};
+	}
 }

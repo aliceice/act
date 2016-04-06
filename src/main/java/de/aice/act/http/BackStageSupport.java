@@ -1,6 +1,7 @@
 package de.aice.act.http;
 
 import de.aice.act.Headers;
+import de.aice.act.MapHeaders;
 import de.aice.act.Request;
 import de.aice.act.Response;
 import java.io.IOException;
@@ -41,7 +42,7 @@ final class BackStageSupport {
 		String requestLine = readLine(stream);
 		Map<String, List<String>> headers = headers(stream);
 		String body = readExactly(contentLength(headers, stream.available()), stream);
-		return new Request(method(requestLine), path(requestLine), headers, body);
+		return new Request(method(requestLine), path(requestLine), new MapHeaders(headers), body);
 	}
 
 	private static Map<String, List<String>> headers(final InputStream stream) throws IOException {

@@ -30,4 +30,8 @@ public interface Stage {
 		return new StageBasic(BackStage.basic(act));
 	}
 
+	static Stage safe(final Act act) {
+		return new StageBasic(BackStage.safe(act));
+	}
+
 }

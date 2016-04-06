@@ -4,6 +4,8 @@ import de.aice.act.Act;
 import java.io.IOException;
 import java.net.Socket;
 
+import static de.aice.act.Fallback.fallback;
+
 /**
  * Backend.
  *
@@ -28,6 +30,10 @@ interface BackStage {
 	 */
 	static BackStage basic(final Act act) {
 		return new BackStageBasic(act);
+	}
+
+	static BackStage safe(final Act act) {
+		return basic(fallback(act));
 	}
 
 }
