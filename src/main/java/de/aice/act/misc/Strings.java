@@ -12,24 +12,22 @@ import static java.util.stream.Collectors.joining;
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
-public final class Strings {
+public interface Strings {
 
-	public static final String CR_LF      = "\r\n";
-	public static final String EMPTY      = "";
-	public static final String WHITESPACE = " ";
-
-	private Strings() {
-
-	}
+	String CR         = "\r";
+	String LF         = "\n";
+	String CR_LF      = CR + LF;
+	String EMPTY      = "";
+	String WHITESPACE = " ";
 
 	/**
 	 * Join input on given delimiter.
 	 *
 	 * @param delimiter input delimiter.
-	 * @param input     array of CharSequences.
+	 * @param input     array request CharSequences.
 	 * @return joined string.
 	 */
-	public static String joinOn(final CharSequence delimiter, final CharSequence... input) {
+	static String joinOn(final CharSequence delimiter, final CharSequence... input) {
 		return Stream.of(input).collect(joining(delimiter));
 	}
 
@@ -37,14 +35,32 @@ public final class Strings {
 	 * Join input on given delimiter.
 	 *
 	 * @param delimiter input delimiter.
-	 * @param input     Collection of objects.
+	 * @param input     Collection request objects.
 	 * @return joined string.
 	 */
-	public static String joinOn(final CharSequence delimiter, final Collection<?> input) {
+	static String joinOn(final CharSequence delimiter, final Collection<?> input) {
 		return input.stream().map(Object::toString).collect(joining(delimiter));
 	}
 
-	public static BinaryOperator<String> joinOn(final CharSequence delimiter) {
+	/**
+	 * Create a function which joins two strings on given delimiter.
+	 *
+	 * @param delimiter delimiter to use
+	 * @return function String -> String -> String
+	 */
+	static BinaryOperator<String> joinOn(final CharSequence delimiter) {
 		return (s1, s2) -> s1 + delimiter + s2;
+	}
+
+	/**
+	 * Return given string if not null. Otherwise return {@link Strings#EMPTY}.
+	 *
+	 * @param string string to default
+	 * @return non null string
+	 */
+	static String defaultString(String string) {
+		return string != null
+		       ? string
+		       : Strings.EMPTY;
 	}
 }

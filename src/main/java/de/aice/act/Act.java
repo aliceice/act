@@ -20,6 +20,11 @@ public interface Act {
 	 */
 	Response on(Request request) throws IOException;
 
+	/**
+	 * Log calls to given act.
+	 * @param act Act to wrap
+	 * @return Act with logging
+	 */
 	static Act logged(Act act) {
 		return request -> {
 			final Response response = act.on(request);

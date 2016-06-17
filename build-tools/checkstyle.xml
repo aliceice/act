@@ -60,7 +60,6 @@
 		<module name="UnnecessaryParentheses"/>
 		<module name="OneStatementPerLine"/>
 		<module name="VariableDeclarationUsageDistance"/>
-		<module name="OverloadMethodsDeclarationOrder"/>
 		<module name="AvoidStarImport"/>
 		<module name="IllegalImport"/>
 		<module name="RedundantImport"/>

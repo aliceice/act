@@ -5,7 +5,7 @@ import de.aice.act.misc.IOConsumer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import static de.aice.act.misc.Structures.tryWith;
 
@@ -32,7 +32,7 @@ final class StageBasic implements Stage {
 
 	private static ServerSocket socket() throws IOException {
 		ServerSocket socket = new ServerSocket(PORT);
-		socket.setSoTimeout((int) TimeUnit.SECONDS.toMillis(1L));
+		socket.setSoTimeout((int) Duration.ofSeconds(1).toMillis());
 		return socket;
 	}
 

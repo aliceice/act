@@ -7,8 +7,8 @@ import java.io.IOException;
  *
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
- * @param <T> Type of input.
- * @param <R> Type of result.
+ * @param <T> Type request input.
+ * @param <R> Type request result.
  */
 interface IOFunction<T, R> {
 

@@ -23,4 +23,27 @@ public interface Exit {
 	static Exit never() {
 		return () -> false;
 	}
+
+	/**
+	 * Exit on signal.
+	 *
+	 * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
+	 * @version $Id$
+	 */
+	final class OnSignal implements Exit {
+
+		private boolean ready;
+
+		@Override
+		public boolean ready() {
+			return this.ready;
+		}
+
+		/**
+		 * Stop signal.
+		 */
+		public void stop() {
+			this.ready = true;
+		}
+	}
 }

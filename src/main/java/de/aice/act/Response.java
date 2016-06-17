@@ -1,10 +1,12 @@
 package de.aice.act;
 
 import de.aice.act.misc.Strings;
-import java.net.HttpURLConnection;
+import java.nio.charset.Charset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static de.aice.act.Status.NOT_FOUND;
+import static de.aice.act.Status.OK;
 import static de.aice.act.misc.Strings.CR_LF;
 import static de.aice.act.misc.Strings.joinOn;
 
@@ -16,7 +18,7 @@ import static de.aice.act.misc.Strings.joinOn;
  */
 public final class Response {
 
-	public final int     status;
+	public final Status  status;
 	public final Headers headers;
 	public final String  body;
 
@@ -26,17 +28,29 @@ public final class Response {
 	 * @return new response.
 	 */
 	public static Response ok() {
-		return status(HttpURLConnection.HTTP_OK);
+		return status(OK);
 	}
 
-	public static Response ok(String body) {
-		return Response.ok().body(body);
+	/**
+	 * 200 OK response with body.
+	 *
+	 * @param body body.
+	 * @return new response.
+	 */
+	public static Response ok(final Object body) {
+		return ok().body(body.toString());
 	}
 
-	public static Response json(String json) {
-		return Response.ok()
-		               .header(Headers.CONTENT_TYPE, "application/json;charset=utf-8")
-		               .body(json);
+	/**
+	 * 200 OK response with JSON header (application/json;charset=utf-8).
+	 *
+	 * @param json JSON body
+	 * @return new response.
+	 */
+	public static Response json(final String json) {
+		return ok().header(Headers.CONTENT_TYPE,
+		                   String.format("application/json;charset=%s", Charset.defaultCharset().displayName()))
+		           .body(json);
 	}
 
 	/**
@@ -45,7 +59,7 @@ public final class Response {
 	 * @return new response.
 	 */
 	public static Response notFound() {
-		return status(HttpURLConnection.HTTP_NOT_FOUND).body("404 not found");
+		return status(NOT_FOUND).body("404 not found");
 	}
 
 	/**
@@ -54,32 +68,22 @@ public final class Response {
 	 * @param status status to use.
 	 * @return new response with given status.
 	 */
-	public static Response status(final int status) {
-		return new Response(status, Strings.EMPTY).header(Headers.DATE,
-		                                                  ZonedDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
-		                                          .header(Headers.CONTENT_TYPE, "text/plain")
-		                                          .header(Headers.CONTENT_LENGTH, 0);
-	}
-
-	private Response(final int status, final String body) {
-		this(status, new MapHeaders(), body);
-	}
-
-	private Response(final int status, final Headers headers, final String body) {
-		this.status = status;
-		this.headers = headers;
-		this.body = body;
+	public static Response status(final Status status) {
+		return new Response(status).header(Headers.DATE,
+		                                   ZonedDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+		                           .header(Headers.CONTENT_TYPE, "text/plain")
+		                           .header(Headers.CONTENT_LENGTH, 0);
 	}
 
 	/**
-	 * Create response with headers.
+	 * Create response with header.
 	 *
-	 * @param header header name.
-	 * @param value  headers value.
-	 * @return new response with appended headers.
+	 * @param name  header name.
+	 * @param value header value.
+	 * @return new response with appended header.
 	 */
-	public Response header(final String header, final Object value) {
-		return new Response(this.status, new MapHeaders(this.headers, header, value), this.body);
+	public Response header(final String name, final Object value) {
+		return new Response(this.status, this.headers.with(name, value), this.body);
 	}
 
 	/**
@@ -89,13 +93,27 @@ public final class Response {
 	 * @return new response with given body.
 	 */
 	public Response body(final String body) {
-		return new Response(this.status, new MapHeaders(this.headers, Headers.CONTENT_LENGTH, body.length()), body);
+		return new Response(this.status, this.headers.with(Headers.CONTENT_LENGTH, body.length()), body);
+	}
+
+	private Response(final Status status) {
+		this(status, Strings.EMPTY);
+	}
+
+	private Response(final Status status, final String body) {
+		this(status, Headers.headers(), body);
+	}
+
+	private Response(final Status status, final Headers headers, final String body) {
+		this.status = status;
+		this.headers = headers;
+		this.body = body;
 	}
 
 	@Override
 	public String toString() {
 		return joinOn(CR_LF,
-		              String.format("HTTP/1.1 %d", this.status),
+		              String.format("HTTP/1.1 %s", this.status),
 		              this.headers.toString(),
 		              Strings.EMPTY,
 		              this.body);

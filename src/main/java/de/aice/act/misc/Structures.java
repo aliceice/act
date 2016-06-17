@@ -10,22 +10,18 @@ import static de.aice.act.misc.Exceptions.unchecked;
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
-public final class Structures {
-
-	private Structures() {
-
-	}
+public interface Structures {
 
 	/**
 	 * Try consumer with auto closeable resource.
 	 *
 	 * @param r   resource supplier.
-	 * @param c   consumer of resource.
-	 * @param <R> type of resource (implements AutoCloseable).
+	 * @param c   consumer request resource.
+	 * @param <R> type request resource (implements AutoCloseable).
 	 * @throws IOException if something goes wrong.
 	 */
-	public static <R extends AutoCloseable> void tryWith(final IOSupplier<R> r,
-	                                                     final IOConsumer<R> c) throws IOException {
+	static <R extends AutoCloseable> void tryWith(final IOSupplier<R> r,
+	                                              final IOConsumer<R> c) throws IOException {
 		R resource = r.get();
 		try {
 			c.accept(resource);
@@ -44,8 +40,8 @@ public final class Structures {
 	 * @return Result value.
 	 * @throws IOException if something goes wrong.
 	 */
-	public static <R extends AutoCloseable, T> T tryWith(final IOSupplier<R> r,
-	                                                     final IOFunction<R, T> f) throws IOException {
+	static <R extends AutoCloseable, T> T tryWith(final IOSupplier<R> r,
+	                                              final IOFunction<R, T> f) throws IOException {
 		R resource = r.get();
 		try {
 			return f.apply(resource);

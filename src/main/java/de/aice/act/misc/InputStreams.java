@@ -17,11 +17,7 @@ import static de.aice.act.misc.Structures.tryWith;
  * @version $Id$
  */
 @SuppressWarnings("checkstyle:javancss")
-public final class InputStreams {
-
-	private InputStreams() {
-
-	}
+public interface InputStreams {
 
 	/**
 	 * Read line from input stream. Uses CR_LF as line end.
@@ -30,7 +26,7 @@ public final class InputStreams {
 	 * @return line.
 	 * @throws IOException if something goes wrong.
 	 */
-	public static String readLine(final InputStream stream) throws IOException {
+	static String readLine(final InputStream stream) throws IOException {
 		return tryWith(ByteArrayOutputStream::new, baos -> {
 			while (true) {
 				int data = stream.read();
@@ -53,7 +49,7 @@ public final class InputStreams {
 	 * @return lines till stop signal.
 	 * @throws IOException if something goes wrong.
 	 */
-	public static List<String> readUntil(final String stopSignal, final InputStream stream) throws IOException {
+	static List<String> readUntil(final String stopSignal, final InputStream stream) throws IOException {
 		List<String> lines = new ArrayList<>();
 		while (true) {
 			String line = readLine(stream);
@@ -65,20 +61,20 @@ public final class InputStreams {
 	}
 
 	/**
-	 * Read exact number of bytes from stream.
+	 * Read exact number request bytes from stream.
 	 *
-	 * @param bytes       number of bytes to read.
+	 * @param bytes       number request bytes to read.
 	 * @param inputStream stream to use.
 	 * @return string.
 	 * @throws IOException if something goes wrong.
 	 */
-	public static String readExactly(final long bytes, final InputStream inputStream) throws IOException {
+	static String readExactly(final long bytes, final InputStream inputStream) throws IOException {
 		return tryWith(ByteArrayOutputStream::new, baos -> {
 			long length = bytes;
-			while (length-- > 0) {
+			while (length > 0) {
 				baos.write(inputStream.read());
+				length--;
 			}
-
 			return new String(baos.toByteArray(), Charset.defaultCharset());
 		});
 	}
@@ -89,7 +85,7 @@ public final class InputStreams {
 	 * @param input input to use.
 	 * @return InputStream.
 	 */
-	public static InputStream stream(final String input) {
+	static InputStream stream(final String input) {
 		return new ByteArrayInputStream(input.getBytes(Charset.defaultCharset()));
 	}
 }

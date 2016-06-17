@@ -1,7 +1,6 @@
 package de.aice.act.http;
 
 import de.aice.act.Headers;
-import de.aice.act.MapHeaders;
 import de.aice.act.Request;
 import de.aice.act.Response;
 import java.io.IOException;
@@ -28,7 +27,6 @@ import static java.util.stream.Collectors.toMap;
 final class BackStageSupport {
 
 	private BackStageSupport() {
-
 	}
 
 	/**
@@ -42,7 +40,7 @@ final class BackStageSupport {
 		String requestLine = readLine(stream);
 		Map<String, List<String>> headers = headers(stream);
 		String body = readExactly(contentLength(headers, stream.available()), stream);
-		return new Request(method(requestLine), path(requestLine), new MapHeaders(headers), body);
+		return Request.request(method(requestLine), path(requestLine), Headers.headers(headers), body);
 	}
 
 	private static Map<String, List<String>> headers(final InputStream stream) throws IOException {
@@ -52,10 +50,10 @@ final class BackStageSupport {
 		            .collect(toMap(parts -> parts[0], parts -> asList(parts[1].split(","))));
 	}
 
-	private static long contentLength(final Map<String, List<String>> headers, final int defaultValue) {
+	private static Long contentLength(final Map<String, List<String>> headers, final int defaultValue) {
 		return headers.containsKey(Headers.CONTENT_LENGTH)
 		       ? Long.valueOf(headers.get(Headers.CONTENT_LENGTH).get(0))
-		       : defaultValue;
+		       : Long.valueOf(defaultValue);
 	}
 
 	private static String method(final String requestLine) {

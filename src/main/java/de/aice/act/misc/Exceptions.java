@@ -8,20 +8,16 @@ import java.io.IOException;
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
-public final class Exceptions {
-
-	private Exceptions() {
-
-	}
+public interface Exceptions {
 
 	/**
 	 * Retrieve value from supplier and rethrow exceptions as a RuntimeException.
 	 *
 	 * @param supplier value supplier.
-	 * @param <T>      type of value.
+	 * @param <T>      type request value.
 	 * @return value.
 	 */
-	public static <T> T unchecked(final IOSupplier<T> supplier) {
+	static <T> T unchecked(final IOSupplier<T> supplier) {
 		try {
 			return supplier.get();
 		} catch (final IOException e) {
@@ -34,10 +30,11 @@ public final class Exceptions {
 	 *
 	 * @param activity activity to execute.
 	 */
-	public static void unchecked(final UnsafeActivity activity) {
+	static void unchecked(final UnsafeActivity activity) {
 		try {
 			activity.execute();
 		} catch (final Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}

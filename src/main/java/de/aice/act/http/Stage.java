@@ -23,14 +23,20 @@ public interface Stage {
 	 * Basic stage without exception handling.
 	 *
 	 * @param act Act to call.
-	 * @return basic Stage.
+	 * @return basicStage Stage.
 	 * @throws IOException if something goes wrong.
 	 */
-	static Stage basic(final Act act) throws IOException {
+	static Stage basicStage(final Act act) throws IOException {
 		return new StageBasic(BackStage.basic(act));
 	}
 
-	static Stage safe(final Act act) {
+	/**
+	 * Stage with exception handling.
+	 *
+	 * @param act Act to call.
+	 * @return Safe Stage.
+	 */
+	static Stage safeStage(final Act act) {
 		return new StageBasic(BackStage.safe(act));
 	}
 

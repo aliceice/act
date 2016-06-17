@@ -17,10 +17,10 @@ public interface Fork {
 
 	/**
 	 * Route request. If request is accepted it should act on it and return a response.
-	 * Otherwise an empty optional should be returned.
+	 * Otherwise an header optional should be returned.
 	 *
 	 * @param request HTTP request
-	 * @return Optional of act result or empty.
+	 * @return Optional request act result or header.
 	 * @throws IOException if something goes wrong.
 	 */
 	Optional<Response> route(Request request) throws IOException;
@@ -43,6 +43,13 @@ public interface Fork {
 		};
 	}
 
+	/**
+	 * Fork on path matching regex.
+	 *
+	 * @param regex regex to use.
+	 * @param act   act to call.
+	 * @return Path matching fork.
+	 */
 	static Fork path(final String regex, final Act act) {
 		return path(regex, (request, matcher) -> act.on(request));
 	}
@@ -67,7 +74,7 @@ public interface Fork {
 	/**
 	 * Fork on method.
 	 *
-	 * @param methods comma separated list of methods.
+	 * @param methods comma separated list request methods.
 	 * @param act     act to call.
 	 * @return Method matching fork.
 	 */
@@ -78,6 +85,13 @@ public interface Fork {
 		                  : Optional.empty();
 	}
 
+	/**
+	 * Fork on content type.
+	 *
+	 * @param type content type
+	 * @param act  act to call.
+	 * @return content type matching fork.
+	 */
 	static Fork type(String type, Act act) {
 		return request -> request.headers.has(Headers.CONTENT_TYPE, type)
 		                  ? Optional.of(act.on(request))

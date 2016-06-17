@@ -7,7 +7,7 @@ import java.io.IOException;
  *
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
- * @param <T> Type of result.
+ * @param <T> Type request result.
  */
 public interface IOSupplier<T> {
 

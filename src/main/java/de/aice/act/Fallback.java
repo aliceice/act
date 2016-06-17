@@ -1,20 +1,36 @@
 package de.aice.act;
 
 import com.jcabi.log.Logger;
+import de.aice.act.misc.Strings;
 import java.net.HttpURLConnection;
 import java.util.Optional;
 
 /**
- * XXX
+ * Fallback on Act exceptions.
  *
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
  */
 public interface Fallback {
 
+	/**
+	 * Fallback on request and exception.
+	 *
+	 * @param request   failed request
+	 * @param exception thrown exception
+	 * @return Response if handled, or else header Optional.
+	 */
 	Optional<Response> on(Request request, Exception exception);
 
-	static Act fallback(Act act, Fallback... chain) {
+	/**
+	 * Fallback chain.
+	 *
+	 * @param act   Act to wrap
+	 * @param chain chain request fallbackChain
+	 * @return Act with fallbackChain chain
+	 */
+	@SuppressWarnings({"checkstyle:returncount", "checkstyle:javancss"})
+	static Act fallbackChain(Act act, Fallback... chain) {
 		return request -> {
 			try {
 				return act.on(request);
@@ -26,8 +42,8 @@ public interface Fallback {
 				}
 				Logger.error(Fallback.class, "%s %s -> %s: %[exception]s", request.method, request.path,
 				             HttpURLConnection.HTTP_INTERNAL_ERROR, e);
-				return Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR)
-				               .body(e.getMessage());
+				return Response.status(Status.INTERNAL_SERVER_ERROR)
+				               .body(Strings.defaultString(e.getMessage()));
 			}
 		};
 	}

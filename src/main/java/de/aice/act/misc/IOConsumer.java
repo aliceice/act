@@ -7,7 +7,7 @@ import java.io.IOException;
  *
  * @author Eléna Ihde-Simon (elena.ihde-simon@posteo.de)
  * @version $Id$
- * @param <T> Type of input.
+ * @param <T> Type request input.
  */
 public interface IOConsumer<T> {
 
