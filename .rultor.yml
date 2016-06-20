@@ -7,7 +7,7 @@ docker:
 install:
   - "java -version"
   - "mvn --version"
-  - "mvn clean install -PskipTests"
+  - "mvn clean install -DskipTests"
 
 merge:
   script:
