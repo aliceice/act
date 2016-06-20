@@ -6,7 +6,7 @@
 
 	<groupId>de.aice.act</groupId>
 	<artifactId>act</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 
 	<name>Act</name>
 	<description>Act is a functional web framework inspired by yegor256/takes.</description>
