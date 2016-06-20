@@ -1,6 +1,5 @@
 package de.aice.act;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 
 /**
@@ -18,8 +17,8 @@ public interface RegexAct {
 	 * @param request HTTP request
 	 * @param matcher Path regex matcher
 	 * @return HTTP Response
-	 * @throws IOException if something goes wrong.
+	 * @throws ActException if something goes wrong.
 	 */
-	Response on(Request request, Matcher matcher) throws IOException;
+	Response on(Request request, Matcher matcher) throws ActException;
 
 }

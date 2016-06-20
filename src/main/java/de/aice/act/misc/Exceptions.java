@@ -1,5 +1,6 @@
 package de.aice.act.misc;
 
+import de.aice.act.ActException;
 import java.io.IOException;
 
 /**
@@ -21,7 +22,7 @@ public interface Exceptions {
 		try {
 			return supplier.get();
 		} catch (final IOException e) {
-			throw new RuntimeException(e);
+			throw new ActException(e);
 		}
 	}
 
@@ -35,7 +36,7 @@ public interface Exceptions {
 			activity.execute();
 		} catch (final Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new ActException(e);
 		}
 	}
 

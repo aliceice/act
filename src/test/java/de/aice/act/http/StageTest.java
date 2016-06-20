@@ -2,7 +2,7 @@ package de.aice.act.http;
 
 import com.jcabi.http.Response;
 import com.jcabi.http.request.JdkRequest;
-import java.io.IOException;
+import de.aice.act.ActException;
 import org.junit.Test;
 
 import static de.aice.act.http.Stage.safeStage;
@@ -15,13 +15,13 @@ public final class StageTest {
 	@Test
 	public void basic_stage_should_not_catch_exceptions() throws Exception {
 		new Thread(() -> unchecked(() -> {
-			Stage stage = Stage.basicStage(r -> {throw new IOException();});
+			Stage stage = Stage.basicStage(r -> {throw new ActException();});
 			stage.start(Exit.never());
 		})).start();
 		try {
 			new JdkRequest("http://localhost:8080/").fetch();
 			fail("Should not catch exceptions");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			assertEquals("Failed GET request to http://localhost:8080/", e.getMessage());
 		}
 	}
@@ -31,13 +31,16 @@ public final class StageTest {
 		String message = "Failure!";
 		Exit.OnSignal exit = new Exit.OnSignal();
 		new Thread(() -> unchecked(() -> {
-			Stage stage = safeStage(r -> {throw new IOException(message);});
+			Stage stage = safeStage(r -> {throw new ActException(message);});
 			stage.start(exit);
 		})).start();
+		
 		Response response = new JdkRequest("http://localhost:8080/").fetch();
+		
 		assertEquals(500, response.status());
 		assertEquals("Internal Server Error", response.reason());
 		assertEquals(message, response.body());
+		
 		exit.stop();
 		Thread.sleep(1000);
 	}

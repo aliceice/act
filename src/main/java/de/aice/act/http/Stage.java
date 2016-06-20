@@ -1,6 +1,7 @@
 package de.aice.act.http;
 
 import de.aice.act.Act;
+import de.aice.act.ActException;
 import java.io.IOException;
 
 /**
@@ -24,9 +25,9 @@ public interface Stage {
 	 *
 	 * @param act Act to call.
 	 * @return basicStage Stage.
-	 * @throws IOException if something goes wrong.
+	 * @throws ActException if something goes wrong.
 	 */
-	static Stage basicStage(final Act act) throws IOException {
+	static Stage basicStage(final Act act) throws ActException {
 		return new StageBasic(BackStage.basic(act));
 	}
 

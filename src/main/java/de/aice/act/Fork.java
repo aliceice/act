@@ -1,6 +1,5 @@
 package de.aice.act;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +20,9 @@ public interface Fork {
 	 *
 	 * @param request HTTP request
 	 * @return Optional request act result or header.
-	 * @throws IOException if something goes wrong.
+	 * @throws ActException if something goes wrong.
 	 */
-	Optional<Response> route(Request request) throws IOException;
+	Optional<Response> route(Request request) throws ActException;
 
 	/**
 	 * Select act through conditional forks.

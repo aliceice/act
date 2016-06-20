@@ -15,7 +15,7 @@ public final class FallbackTest {
 	public void fallback_with_a_chain_returns_first_successful_result() throws Exception {
 		String message = "It works!";
 
-		Act fallback = fallbackChain(r -> { throw new IOException(); },
+		Act fallback = fallbackChain(r -> { throw new ActException(); },
 		                             (r, e) -> Optional.empty(),
 		                             (r, e) -> Optional.of(ok(message)));
 		Response response = fallback.on(request("GET"));

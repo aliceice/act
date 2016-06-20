@@ -1,7 +1,6 @@
 package de.aice.act;
 
 import com.jcabi.log.Logger;
-import java.io.IOException;
 
 /**
  * Act.
@@ -16,9 +15,9 @@ public interface Act {
 	 *
 	 * @param request HTTP request
 	 * @return HTTP response
-	 * @throws IOException if something goes wrong.
+	 * @throws ActException if something goes wrong.
 	 */
-	Response on(Request request) throws IOException;
+	Response on(Request request) throws ActException;
 
 	/**
 	 * Log calls to given act.
