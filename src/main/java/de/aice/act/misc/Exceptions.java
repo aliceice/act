@@ -1,7 +1,6 @@
 package de.aice.act.misc;
 
 import de.aice.act.ActException;
-import java.io.IOException;
 
 /**
  * Exception utilities.
@@ -15,14 +14,14 @@ public interface Exceptions {
 	 * Retrieve value from supplier and rethrow exceptions as a RuntimeException.
 	 *
 	 * @param supplier value supplier.
-	 * @param <T>      type request value.
+	 * @param <T>      types request value.
 	 * @return value.
 	 */
-	static <T> T unchecked(final IOSupplier<T> supplier) {
+	static <T> T unchecked(final UnsafeSupplier<T> supplier) {
 		try {
 			return supplier.get();
-		} catch (final IOException e) {
-			throw new ActException(e);
+		} catch (final Exception e) {
+			throw new ActException(e.getMessage(), e);
 		}
 	}
 

@@ -24,6 +24,8 @@ public interface Fork {
 	 */
 	Optional<Response> route(Request request) throws ActException;
 
+	String SPLIT_CHAR = ",";
+
 	/**
 	 * Select act through conditional forks.
 	 *
@@ -78,21 +80,21 @@ public interface Fork {
 	 * @return Method matching fork.
 	 */
 	static Fork method(final String methods, final Act act) {
-		List<String> list = Arrays.asList(methods.split(","));
+		List<String> list = Arrays.asList(methods.split(SPLIT_CHAR));
 		return request -> list.contains(request.method)
 		                  ? Optional.of(act.on(request))
 		                  : Optional.empty();
 	}
 
 	/**
-	 * Fork on content type.
+	 * Fork on content types.
 	 *
-	 * @param type content type
+	 * @param types content types
 	 * @param act  act to call.
-	 * @return content type matching fork.
+	 * @return content types matching fork.
 	 */
-	static Fork type(String type, Act act) {
-		return request -> request.headers.has(Headers.CONTENT_TYPE, type)
+	static Fork types(String types, Act act) {
+		return request -> request.headers.hasAny(Headers.CONTENT_TYPE, types.split(SPLIT_CHAR))
 		                  ? Optional.of(act.on(request))
 		                  : Optional.empty();
 	}

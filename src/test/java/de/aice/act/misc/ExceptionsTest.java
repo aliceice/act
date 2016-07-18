@@ -21,11 +21,11 @@ public final class ExceptionsTest {
 	public void unchecked_get_from_IOSupplier_should_throw_RuntimeException_if_it_fails() throws Exception {
 		String message = "Hello, there!";
 		try {
-			IOSupplier<String> supplier = () -> { throw new IOException(message); };
+			UnsafeSupplier<String> supplier = () -> { throw new IOException(message); };
 			unchecked(supplier);
 			fail("unchecked should throw RuntimeException.");
 		} catch (RuntimeException e) {
-			assertEquals("java.io.IOException: " + message, e.getMessage());
+			assertEquals(message, e.getMessage());
 		}
 	}
 

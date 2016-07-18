@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static de.aice.act.misc.Strings.joinOn;
 
@@ -16,13 +17,13 @@ import static de.aice.act.misc.Strings.joinOn;
  * @version $Id$
  */
 public final class Headers {
-	
+
 	public static final String ACCEPT         = "Accept";
 	public static final String CONTENT_LENGTH = "Content-Length";
 	public static final String CONTENT_TYPE   = "Content-Type";
 	public static final String DATE           = "Date";
 	public static final String HOST           = "Host";
-	
+
 	/**
 	 * Empty Headers.
 	 *
@@ -31,7 +32,7 @@ public final class Headers {
 	public static Headers headers() {
 		return headers(new HashMap<>());
 	}
-	
+
 	/**
 	 * Headers with single header.
 	 *
@@ -44,7 +45,7 @@ public final class Headers {
 		headersByName.put(name, Collections.singletonList(value.toString()));
 		return headers(headersByName);
 	}
-	
+
 	/**
 	 * Headers request a map request header by name.
 	 *
@@ -54,13 +55,13 @@ public final class Headers {
 	public static Headers headers(final Map<String, List<String>> headersByName) {
 		return new Headers(headersByName);
 	}
-	
+
 	private final Map<String, List<String>> headersByName;
-	
+
 	private Headers(final Map<String, List<String>> map) {
 		this.headersByName = map;
 	}
-	
+
 	/**
 	 * Get single header value.
 	 *
@@ -72,7 +73,7 @@ public final class Headers {
 		       ? Optional.of(this.headersByName.get(name).get(0))
 		       : Optional.empty();
 	}
-	
+
 	/**
 	 * Create new headers with given header.
 	 *
@@ -85,7 +86,7 @@ public final class Headers {
 		newHeadersByName.put(name, Collections.singletonList(value.toString()));
 		return Headers.headers(newHeadersByName);
 	}
-	
+
 	/**
 	 * Check whether a given header exists and has given value.
 	 *
@@ -94,10 +95,24 @@ public final class Headers {
 	 * @return true if header with value exists, false otherwise.
 	 */
 	public boolean has(final String name, final String value) {
-		return this.headersByName.containsKey(name)
-		       && this.headersByName.get(name).contains(value);
+		return Optional.ofNullable(this.headersByName.get(name))
+		               .map(header -> header.contains(value))
+		               .orElse(false);
 	}
-	
+
+	/**
+	 * Check whether a given header exists and has any of the given values.
+	 *
+	 * @param name  header name
+	 * @param values header values
+	 * @return true if header with values exists, false otherwise.
+	 */
+	public boolean hasAny(final String name, final String... values) {
+		return Optional.ofNullable(this.headersByName.get(name))
+		               .map(header -> Stream.of(values).anyMatch(header::contains))
+		               .orElse(false);
+	}
+
 	@Override
 	public String toString() {
 		return this.headersByName.entrySet()
@@ -106,5 +121,5 @@ public final class Headers {
 		                         .reduce(joinOn(Strings.CR_LF))
 		                         .orElse(Strings.EMPTY);
 	}
-	
+
 }

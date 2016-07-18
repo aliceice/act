@@ -1,7 +1,7 @@
 package de.aice.act.http;
 
 import com.jcabi.log.Logger;
-import de.aice.act.misc.IOConsumer;
+import de.aice.act.misc.UnsafeConsumer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
@@ -26,7 +26,7 @@ final class StageBasic implements Stage {
 	}
 
 	@Override
-	public void start(final Exit exit) throws IOException {
+	public void start(final Exit exit) throws Exception {
 		tryWith(StageBasic::socket, acceptUntil(exit));
 	}
 
@@ -36,7 +36,7 @@ final class StageBasic implements Stage {
 		return socket;
 	}
 
-	private IOConsumer<ServerSocket> acceptUntil(final Exit exit) throws IOException {
+	private UnsafeConsumer<ServerSocket> acceptUntil(final Exit exit) throws Exception {
 		return socket -> {
 			Logger.info(Stage.class, "Basic stage started!");
 			do {
@@ -45,7 +45,7 @@ final class StageBasic implements Stage {
 		};
 	}
 
-	private void accept(final ServerSocket socket) throws IOException {
+	private void accept(final ServerSocket socket) throws Exception {
 		try {
 			this.backStage.accept(socket.accept());
 		} catch (final SocketTimeoutException ex) {

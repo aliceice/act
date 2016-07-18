@@ -118,5 +118,4 @@ public final class Response {
 		              Strings.EMPTY,
 		              this.body);
 	}
-
 }

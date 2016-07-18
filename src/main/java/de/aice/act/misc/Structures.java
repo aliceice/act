@@ -1,7 +1,5 @@
 package de.aice.act.misc;
 
-import java.io.IOException;
-
 import static de.aice.act.misc.Exceptions.unchecked;
 
 /**
@@ -17,11 +15,11 @@ public interface Structures {
 	 *
 	 * @param r   resource supplier.
 	 * @param c   consumer request resource.
-	 * @param <R> type request resource (implements AutoCloseable).
-	 * @throws IOException if something goes wrong.
+	 * @param <R> types request resource (implements AutoCloseable).
+	 * @throws Exception if something goes wrong.
 	 */
-	static <R extends AutoCloseable> void tryWith(final IOSupplier<R> r,
-	                                              final IOConsumer<R> c) throws IOException {
+	static <R extends AutoCloseable> void tryWith(final UnsafeSupplier<R> r,
+	                                              final UnsafeConsumer<R> c) throws Exception {
 		R resource = r.get();
 		try {
 			c.accept(resource);
@@ -35,13 +33,13 @@ public interface Structures {
 	 *
 	 * @param r   resource supplier.
 	 * @param f   function to execute.
-	 * @param <R> Resource type (must implement AutoCloseable).
-	 * @param <T> Result type.
+	 * @param <R> Resource types (must implement AutoCloseable).
+	 * @param <T> Result types.
 	 * @return Result value.
-	 * @throws IOException if something goes wrong.
+	 * @throws Exception if something goes wrong.
 	 */
-	static <R extends AutoCloseable, T> T tryWith(final IOSupplier<R> r,
-	                                              final IOFunction<R, T> f) throws IOException {
+	static <R extends AutoCloseable, T> T tryWith(final UnsafeSupplier<R> r,
+	                                              final IOFunction<R, T> f) throws Exception {
 		R resource = r.get();
 		try {
 			return f.apply(resource);

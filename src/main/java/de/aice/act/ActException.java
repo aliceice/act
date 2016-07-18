@@ -7,17 +7,21 @@ package de.aice.act;
  * @version $Id$
  */
 public final class ActException extends RuntimeException {
-	
+
 	public ActException() {
 		super();
 	}
-	
+
 	public ActException(final String message) {
 		super(message);
 	}
-	
+
+	public ActException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
+
 	public ActException(final Throwable cause) {
 		super(cause);
 	}
-	
+
 }

@@ -1,7 +1,5 @@
 package de.aice.act.misc;
 
-import java.io.IOException;
-
 /**
  * Consumer which might throw an IOException.
  *
@@ -9,13 +7,13 @@ import java.io.IOException;
  * @version $Id$
  * @param <T> Type request input.
  */
-public interface IOConsumer<T> {
+public interface UnsafeConsumer<T> {
 
 	/**
 	 * Consume t value.
 	 *
 	 * @param t value to consume.
-	 * @throws IOException if something goes wrong.
+	 * @throws Exception if something goes wrong.
 	 */
-	void accept(T t) throws IOException;
+	void accept(T t) throws Exception;
 }

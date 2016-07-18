@@ -24,6 +24,7 @@
 	</properties>
 
 	<dependencies>
+		<!-- Logging -->
 		<dependency>
 			<groupId>com.jcabi</groupId>
 			<artifactId>jcabi-log</artifactId>
@@ -33,6 +34,37 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-jdk14</artifactId>
 			<version>1.7.5</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- XML handling -->
+		<dependency>
+			<groupId>net.sourceforge.saxon</groupId>
+			<artifactId>saxon</artifactId>
+			<version>9.1.0.8</version>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.saxon</groupId>
+			<artifactId>saxon</artifactId>
+			<version>9.1.0.8</version>
+			<classifier>xpath</classifier>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.saxon</groupId>
+			<artifactId>saxon</artifactId>
+			<version>9.1.0.8</version>
+			<classifier>dom</classifier>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.jcabi.incubator</groupId>
+			<artifactId>xembly</artifactId>
+			<version>0.22</version>
 			<optional>true</optional>
 		</dependency>
 

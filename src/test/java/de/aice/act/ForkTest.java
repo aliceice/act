@@ -6,7 +6,7 @@ import org.junit.Test;
 import static de.aice.act.Fork.method;
 import static de.aice.act.Fork.path;
 import static de.aice.act.Fork.select;
-import static de.aice.act.Fork.type;
+import static de.aice.act.Fork.types;
 import static de.aice.act.Headers.CONTENT_TYPE;
 import static de.aice.act.Headers.header;
 import static de.aice.act.Request.request;
@@ -20,14 +20,14 @@ public final class ForkTest {
 	@Test
 	public void fork_on_type_should_return_empty_response_if_headers_do_not_contain_given_type() throws Exception {
 		Request request = request(header(CONTENT_TYPE, "application/json"));
-		Optional<Response> response = type("application/xml", r -> ok()).route(request);
+		Optional<Response> response = types("application/xml", r -> ok()).route(request);
 		assertFalse(response.isPresent());
 	}
 
 	@Test
 	public void fork_on_type_should_call_act_if_headers_contain_given_type() throws Exception {
 		Request request = request(header(CONTENT_TYPE, "application/json"));
-		Optional<Response> response = type("application/json", r -> ok()).route(request);
+		Optional<Response> response = types("application/json", r -> ok()).route(request);
 		assertTrue(response.isPresent());
 	}
 
@@ -79,7 +79,7 @@ public final class ForkTest {
 	public void select_should_return_not_found_if_no_fork_matched_the_request() throws Exception {
 		Request request = request("POST");
 		Response response = select(
-			type("application/json", r -> ok()), type("application/xml", r -> ok())
+			types("application/json", r -> ok()), types("text/xml,application/xml", r -> ok())
 		).on(request);
 		assertEquals(404, response.status.code);
 	}

@@ -31,4 +31,13 @@ public interface Act {
 			return response;
 		};
 	}
+
+	/**
+	 * Act with fixed response body.
+	 * @param responseBody body to use
+	 * @return Fixed response body Act
+	 */
+	static Act fixed(String responseBody) {
+		return request -> Response.ok(responseBody);
+	}
 }

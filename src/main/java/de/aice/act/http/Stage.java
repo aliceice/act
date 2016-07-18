@@ -2,7 +2,6 @@ package de.aice.act.http;
 
 import de.aice.act.Act;
 import de.aice.act.ActException;
-import java.io.IOException;
 
 /**
  * Stage.
@@ -16,9 +15,9 @@ public interface Stage {
 	 * Start until exit.
 	 *
 	 * @param exit exit.
-	 * @throws IOException if something goes wrong.
+	 * @throws Exception if something goes wrong.
 	 */
-	void start(Exit exit) throws IOException;
+	void start(Exit exit) throws Exception;
 
 	/**
 	 * Basic stage without exception handling.

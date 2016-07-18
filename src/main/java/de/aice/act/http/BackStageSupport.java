@@ -3,7 +3,6 @@ package de.aice.act.http;
 import de.aice.act.Headers;
 import de.aice.act.Request;
 import de.aice.act.Response;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
@@ -34,16 +33,16 @@ final class BackStageSupport {
 	 *
 	 * @param stream stream to use.
 	 * @return HTTP request.
-	 * @throws IOException if something goes wrong.
+	 * @throws Exception if something goes wrong.
 	 */
-	static Request readRequest(final InputStream stream) throws IOException {
+	static Request readRequest(final InputStream stream) throws Exception {
 		String requestLine = readLine(stream);
 		Map<String, List<String>> headers = headers(stream);
 		String body = readExactly(contentLength(headers, stream.available()), stream);
 		return Request.request(method(requestLine), path(requestLine), Headers.headers(headers), body);
 	}
 
-	private static Map<String, List<String>> headers(final InputStream stream) throws IOException {
+	private static Map<String, List<String>> headers(final InputStream stream) throws Exception {
 		List<String> lines = readUntil(EMPTY, stream);
 		return lines.stream()
 		            .map(line -> line.split(": "))
@@ -69,9 +68,9 @@ final class BackStageSupport {
 	 *
 	 * @param response response to write.
 	 * @param out      stream to use.
-	 * @throws IOException if something goes wrong.
+	 * @throws Exception if something goes wrong.
 	 */
-	static void writeResponse(final Response response, final OutputStream out) throws IOException {
+	static void writeResponse(final Response response, final OutputStream out) throws Exception {
 		try {
 			out.write(response.toString().getBytes(defaultCharset()));
 		} finally {

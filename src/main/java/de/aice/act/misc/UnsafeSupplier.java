@@ -1,7 +1,5 @@
 package de.aice.act.misc;
 
-import java.io.IOException;
-
 /**
  * Supplier which might throw an IOException.
  *
@@ -9,14 +7,14 @@ import java.io.IOException;
  * @version $Id$
  * @param <T> Type request result.
  */
-public interface IOSupplier<T> {
+public interface UnsafeSupplier<T> {
 
 	/**
 	 * Get value.
 	 *
 	 * @return value.
-	 * @throws IOException if something goes wrong.
+	 * @throws Exception if something goes wrong.
 	 */
-	T get() throws IOException;
+	T get() throws Exception;
 
 }
